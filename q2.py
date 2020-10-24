@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
+
 import re
 from datetime import date
-import traceback
 
 month = {'jan': 1, 'feb': 2, 'mar': 3, 'apr': 4, 'may': 5, 'jun': 6,
          'jul': 7, 'aug': 8, 'sep': 9, 'oct': 10, 'nov': 11, 'dec': 12}
@@ -46,7 +46,6 @@ def checkValidDate():
         yy1 = int(re.findall(yy_pat, x[0])[0].strip())
         yy2 = int(re.findall(yy_pat, x[1])[0].strip())
     except Exception as e:
-        traceback.print_exc()
         print('incorrect format ', str(e))
     if yy2 < yy1:
         yy1, yy2 = yy2, yy1
