@@ -85,10 +85,14 @@ for x in e2_free:
     e2_free_fmt.append(x[0].strftime(
         '%-I:%M%p') + ' - '+x[1].strftime('%-I:%M%p'))
 
-print('Available slot\n'+e1_name, ':', e1_free_fmt,
-      '\n'+e2_name, ':', e2_free_fmt, sep=' ')
+#print('Available slot\n'+e1_name, ':', e1_free_fmt,'\n'+e2_name, ':', e2_free_fmt, sep=' ')
 slot = float(input('Enter slot duration: '))
-slot = float(slot)*60
+#slot = float(slot)*60
 freeSlot = {}
-freeSlot[meet_date] = getOverlap(e1_free, e2_free, minToAdd=slot)
-print(freeSlot)
+freeSlot[meet_date] = getOverlap(e1_free, e2_free, minToAdd=float(slot)*60)
+#print(freeSlot)
+
+f = open('output.txt', 'w')
+f.write('Available slot\n'+e1_name + ' : ' +
+        str(e1_free_fmt)+'\n'+e2_name + ' : ' + str(e2_free_fmt)+'\n\n'+'Slot duration: '+str(slot)+' hour\n'+str(freeSlot))
+f.close()

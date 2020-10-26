@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import re
-from datetime import date
 
 month = {'jan': 1, 'feb': 2, 'mar': 3, 'apr': 4, 'may': 5, 'jun': 6,
          'jul': 7, 'aug': 8, 'sep': 9, 'oct': 10, 'nov': 11, 'dec': 12}
@@ -60,7 +59,6 @@ def checkValidDate():
 
     diff = -dd1
 
-    delta = date(yy2, mm2, dd2)-date(yy1, mm1, dd1)
     while yy1 < yy2 or mm1 <= mm2:
         diff += (days[mm1-1]+1 if isLeap(yy1) and mm1 == 2 else days[mm1-1])
         mm1 += 1
@@ -69,8 +67,9 @@ def checkValidDate():
             yy1 = yy1+1
     days[1] = 29 if mm2 == 2 and isLeap(yy2) else 28
     diff -= (days[mm2-1]-dd2)
-    print(diff,' Day')
-    print(delta.days)
+    f = open('output.txt', 'w')
+    f.write('Date difference: '+str(diff)+' day')
+    f.close()
 
 
 checkValidDate()

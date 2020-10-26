@@ -3,9 +3,6 @@ __pycache__/
 *.py[cod]
 *$py.class
 .vscode/
-date_calculator.txt
-Employee1.txt
-Employee2.txt
 
 # C extensions
 *.so

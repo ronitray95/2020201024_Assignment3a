@@ -22,16 +22,20 @@ for lvl in org_map:
         except Exception:
             emp[emp_list['name']] = 'X'
         emp_lvl[emp_list['name']] = int(lvl[1:])
-print(emp, emp_lvl)
+#print(emp, emp_lvl)
 emp_id = input('Enter 2 employee ID (space separated) ').split(' ')
 e1, e2 = emp_id[0], emp_id[1]
+output = ''
 while True:
-    if e1 not in emp or e2 not in emp:
-        print('No common leader')
+    if (e1 not in emp or e2 not in emp) or (emp[e1] == 'X' or emp[e2] == 'X'):
+        output = 'No common leader'
         break
     if emp[e1] == emp[e2]:
-        print(emp[e1]+'\n', emp_id[0], 'is', emp_lvl[emp_id[0]]-emp_lvl[emp[e1]], 'levels below\n',
-              emp_id[1], 'is', emp_lvl[emp_id[1]]-emp_lvl[emp[e1]], 'levels below', sep=' ')
+        output = emp[e1]+'\n'+emp[e1]+' is ' + \
+            str(emp_lvl[emp_id[0]]-emp_lvl[emp[e1]])+' levels above '+emp_id[0]
+        output = output+'\n' + \
+            emp[e1]+' is '+str(emp_lvl[emp_id[1]]-emp_lvl[emp[e1]]
+                               )+' levels above '+emp_id[1]
         break
     elif emp_lvl[e1] > emp_lvl[e2]:
         e1 = emp[e1]
@@ -40,3 +44,7 @@ while True:
     else:
         e1 = emp[e1]
         e2 = emp[e2]
+
+f = open('output.txt', 'w')
+f.write(output)
+f.close()
