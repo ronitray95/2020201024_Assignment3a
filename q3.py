@@ -2,7 +2,6 @@
 
 import json
 import datetime
-from collections import namedtuple
 
 
 def parseFile(file_name):

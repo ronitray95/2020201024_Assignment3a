@@ -31,6 +31,7 @@ def checkValidDate():
         dd2 = int(re.findall(dd_pat, x[1])[0].strip())
         mo1 = str(re.findall(mm_pat, x[0])[0]).strip()
         mo1 = mo1.lower()
+        mo1 = ''.join(e for e in mo1 if e.isalnum())
         if len(mo1) > 2:
             mm1 = int(month[mo1[:3]])
         else:
@@ -68,7 +69,7 @@ def checkValidDate():
             yy1 = yy1+1
     days[1] = 29 if mm2 == 2 and isLeap(yy2) else 28
     diff -= (days[mm2-1]-dd2)
-    print(diff)
+    print(diff,' Day')
     print(delta.days)
 
 
