@@ -27,20 +27,6 @@ def getAllFreeSlots(a1: list, a2: list):
     return newlist
 
 
-def getOverlap(a1: list, a2: list, minToAdd: float):
-    for i in range(0, len(a1)):
-        for j in range(0, len(a2)):
-            # if max(a1[i][0], a2[j][0]) <= min(a1[i][1], a2[j][1]):
-            latest_start = max(a1[i][0], a2[j][0])
-            earliest_end = min(a1[i][1], a2[j][1])
-            timeDiff = (earliest_end-latest_start).seconds / 60
-            if earliest_end > latest_start and timeDiff >= minToAdd:
-                x = latest_start+datetime.timedelta(days=0, minutes=minToAdd)
-                #print(latest_start, earliest_end, timeDiff, sep='\t')
-                return str(latest_start.strftime('%-I:%M%p') + ' - ' + x.strftime('%-I:%M%p'))
-    return 'Slot not available'
-
-
 ptr = 1
 output = 'Available slot\n'
 freeSlotAllEmp = []
