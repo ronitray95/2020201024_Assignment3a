@@ -16,6 +16,23 @@ def isLeap(year):
     return False
 
 
+def parseDateRegex(x: str, dd_pat: str, mm_pat: str, yy_pat: str):
+    dd1 = re.findall(dd_pat, x)[0].strip()
+    dd1 = int(re.sub('[^0-9]+', '', dd1))
+    #dd1 = int(''.join(e for e in dd1 if e.isalnum()))
+
+    mo1 = str(re.findall(mm_pat, x)[0]).strip()
+    mo1 = mo1.lower()
+    mo1 = re.sub('[^A-Za-z0-9]+', '', mo1)
+    #mo1 = ''.join(e for e in mo1 if e.isalnum())
+    if len(mo1) > 2:
+        mm1 = int(month[mo1[:3]])
+    else:
+        mm1 = int(mo1)
+    yy1 = int(re.findall(yy_pat, x)[0].strip())
+    return [int(dd1), int(mm1), int(yy1)]
+
+
 def getDateComponents(x: str, dateFormat: str):
 
     dd_pat1 = '^[0-9]+'
@@ -26,28 +43,10 @@ def getDateComponents(x: str, dateFormat: str):
 
     yy_pat = '[0-9]{4}$'
     try:
-        dd1 = re.findall(dd_pat1, x)[0].strip()
-        dd1 = int(''.join(e for e in dd1 if e.isalnum()))
-
-        mo1 = str(re.findall(mm_pat2, x)[0]).strip()
-        mo1 = mo1.lower()
-        mo1 = ''.join(e for e in mo1 if e.isalnum())
-        if len(mo1) > 2:
-            mm1 = int(month[mo1[:3]])
-        else:
-            mm1 = int(mo1)
-        yy1 = int(re.findall(yy_pat, x)[0].strip())
+        parsedList = parseDateRegex(x, dd_pat1, mm_pat2, yy_pat)
     except Exception as e:
-        dd1 = re.findall(dd_pat2, x)[0].strip()
-        dd1 = int(''.join(e for e in dd1 if e.isalnum()))
-        mo1 = str(re.findall(mm_pat1, x)[0]).strip()
-        mo1 = mo1.lower()
-        mo1 = ''.join(e for e in mo1 if e.isalnum())
-        if len(mo1) > 2:
-            mm1 = int(month[mo1[:3]])
-        else:
-            mm1 = int(mo1)
-        yy1 = int(re.findall(yy_pat, x)[0].strip())
+        parsedList = parseDateRegex(x, dd_pat2, mm_pat1, yy_pat)
+    dd1, mm1, yy1 = parsedList[0], parsedList[1], parsedList[2]
     hasAlpha = x.upper().isupper()
     if hasAlpha == False and dateFormat != '' and (dateFormat[0]).lower() == 'm':
         dd1, mm1 = mm1, dd1
@@ -56,46 +55,46 @@ def getDateComponents(x: str, dateFormat: str):
     return [dd1, mm1, yy1]
 
 
-def checkValidDate(dateFormat: str):
-    with open('date_calculator.txt', 'r') as f:
-        x = f.readlines()
-
-    x[0] = x[0].strip()
-    x[1] = x[1].strip()
-    date1 = getDateComponents(x[0], dateFormat)
-    date2 = getDateComponents(x[1], dateFormat)
-    dd1, mm1, yy1 = date1[0], date1[1], date1[2]
-    dd2, mm2, yy2 = date2[0], date2[1], date2[2]
-
-    if yy2 < yy1:
-        yy1, yy2 = yy2, yy1
-        mm1, mm2 = mm2, mm1
-        dd1, dd2 = dd2, dd1
-    elif yy2 == yy1 and mm2 < mm1:
-        mm1, mm2 = mm2, mm1
-        dd1, dd2 = dd2, dd1
-    elif yy2 == yy1 and mm2 == mm1 and dd2 < dd1:
-        dd1, dd2 = dd2, dd1
-
-    diff = -dd1
-
-    while yy1 < yy2 or mm1 <= mm2:
-        diff += (days[mm1-1]+1 if isLeap(yy1) and mm1 == 2 else days[mm1-1])
-        if yy1 == yy2 and mm1 == mm2:
-            break
-        mm1 += 1
-        if mm1 == 13:
-            mm1 = 1
-            yy1 = yy1+1
-    days[1] = 29 if mm2 == 2 and isLeap(yy2) else 28
-    diff -= (days[mm2-1]-dd2)
-    f = open('output.txt', 'w')
-    f.write('Date difference: '+str(diff)+' day')
-    f.close()
+#def checkValidDate(dateFormat: str):
 
 
 dateFmt = ''
 if len(sys.argv) > 1:
     dateFmt = (sys.argv)[1]
 
-checkValidDate(dateFmt)
+#checkValidDate(dateFmt)
+with open('date_calculator.txt', 'r') as f:
+    x = f.readlines()
+
+x[0] = x[0].strip()
+x[1] = x[1].strip()
+date1 = getDateComponents(x[0], dateFmt)
+date2 = getDateComponents(x[1], dateFmt)
+dd1, mm1, yy1 = date1[0], date1[1], date1[2]
+dd2, mm2, yy2 = date2[0], date2[1], date2[2]
+
+if yy2 < yy1:
+    yy1, yy2 = yy2, yy1
+    mm1, mm2 = mm2, mm1
+    dd1, dd2 = dd2, dd1
+elif yy2 == yy1 and mm2 < mm1:
+    mm1, mm2 = mm2, mm1
+    dd1, dd2 = dd2, dd1
+elif yy2 == yy1 and mm2 == mm1 and dd2 < dd1:
+    dd1, dd2 = dd2, dd1
+
+diff = -dd1
+
+while yy1 < yy2 or mm1 <= mm2:
+    diff += (days[mm1-1]+1 if isLeap(yy1) and mm1 == 2 else days[mm1-1])
+    if yy1 == yy2 and mm1 == mm2:
+        break
+    mm1 += 1
+    if mm1 == 13:
+        mm1 = 1
+        yy1 = yy1+1
+days[1] = 29 if mm2 == 2 and isLeap(yy2) else 28
+diff -= (days[mm2-1]-dd2)
+f = open('output.txt', 'w')
+f.write('Date difference: '+str(diff)+' day')
+f.close()
